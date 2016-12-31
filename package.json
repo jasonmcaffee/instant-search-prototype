@@ -1,0 +1,44 @@
+{
+  "name": "hapi-babel-baseline",
+  "version": "1.0.0",
+  "description": "baseline project with hapi, babel, eslint, jwt, and jasmine setup",
+  "main": "index.js",
+  "engines" : { "node" : "7.0.0" },  
+  "scripts": {
+    "initial-setup": "npm install jasmine -g && npm install babel-cli -g && npm install eslint -g && npm install && npm run build",
+    "initial-setup-for-codio": "npm run codio:download-node && npm run codio:install-node && npm run initial-setup",
+    "start": "node index.js",
+    "test": "NODE_ENV=test-unit jasmine JASMINE_CONFIG_PATH=jasmine.json",
+    "build-no-clean": "babel src --out-dir build --source-maps",
+    "build-watch": "babel src --out-dir build --source-maps --watch",
+    "clean": "rm -rf build",
+    "build": "npm run clean && npm run build-no-clean"
+  },
+  "author": "titan team",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "boom": "^4.0.0",
+    "config": "^1.21.0",
+    "glob": "^7.0.6",
+    "hapi": "^15.0.3",
+    "hapi-auth-jwt2": "^7.1.3",
+    "hapi-swagger": "^7.2.0",
+    "hapi-swaggered": "^2.7.0",
+    "hapi-swaggered-ui": "^2.5.1",
+    "inert": "^4.0.2",
+    "joi": "^9.0.4",
+    "lodash": "^4.16.4",
+    "logger": "git+http://bitbucket.is.com:7990/scm/tg/logger.git#v1.0.7",
+    "mysql": "^2.11.1",
+    "squel": "^4.2.3",
+    "vision": "^4.1.0"
+  },
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-cli": "^6.14.0",
+    "babel-plugin-transform-async-to-generator": "^6.8.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.14.0",
+    "jasmine": "2.4.1"
+  }
+}
