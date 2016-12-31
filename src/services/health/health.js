@@ -7,6 +7,11 @@ import * as os from 'os';
  * @type {{health, couchbaseStatus, serverStatus, osStatus}}
  */
 export let service = {
+
+  /**
+   * Returns summary of system health, including db connectivity, os info, etc.
+   * @returns {Promise.<{systemOverallStatus: *, serverStatus: *, osStatus: *}>}
+   */
   getHealth: async function () {
     let serverStatus = this.serverStatus;
     let osStatus = this.osStatus;
@@ -31,6 +36,11 @@ export let service = {
     return status;
   },
 
+
+  /**
+   * returns server status along with config
+   * @returns {{ok, config: *}}
+   */
   get serverStatus () {
     return {
       get ok () {
@@ -40,6 +50,10 @@ export let service = {
     };
   },
 
+  /**
+   * returns os info available to node's os module.
+   * @returns {{ok: boolean, hostname: *, type, platform: *, arch: *, release: *, uptime: *, loadavg: *, totalmem: *, freemem: *, cpus: *, networkInterfaces: *}}
+   */
   get osStatus () {
     return {
       ok: true,

@@ -12,14 +12,14 @@ export default {
     tags: ['api'], // api tag is for hapi swagger generation
 
     validate: {
-        //payload: someRequestBodyPayloadSchema,
+        // payload: someRequestBodyPayloadSchema,
         // params: {
         //     namespace: e.g if your url was '/v1/health/{namespace}/{key}' this would validate the namespace value,
         //     key: keyJoiSchema
         // }
     },
     response: {
-        schema: healthResponseSchema
+      schema: healthResponseSchema
     },
     handler: async (request, reply) => {
       let result = await healthService.getHealth();
