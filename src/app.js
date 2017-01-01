@@ -1,3 +1,6 @@
+/* eslint no-process-env: "off" */
+/* eslint no-sync: "off" */
+/* eslint global-require: "off" */
 // allow imports/requires to use non-relative paths to load other modules.
 // e.g. instead of require('../../services/health') we can use require('services/health')
 process.env.NODE_PATH = __dirname;

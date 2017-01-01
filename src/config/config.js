@@ -1,3 +1,4 @@
+/* eslint no-process-env: "off" */
 import Joi from 'joi';
 /**
  * JSON object representing the service's configuration.
