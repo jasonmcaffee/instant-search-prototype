@@ -21,7 +21,8 @@ beforeAll(async (done)=>{
 async function setupIntegration(){
   console.log('setting up for integration testing...');
   const spawn = require('child_process').spawn;
-  const ls = spawn('npm', ['run', 'start']);
+
+  const ls = spawn('npm', ['run', 'docker:runintegration']);
 
   let serverStartedPromise = new Promise((resolve, reject)=>{
     ls.stdout.on('data', (data) => {
@@ -35,9 +36,9 @@ async function setupIntegration(){
 
     ls.stderr.on('data', (data) => {
       console.error(`stderr: ${data}`);
-      if(data.indexOf('os.tmpDir()') < 0){
-        reject(data);
-        ls.kill();//force the process to die
+      if(data.indexOf('os.tmpDir()') < 0 && data.indexOf('the input device is not a TTY') < 0){
+        //reject(data);
+        //ls.kill();//force the process to die
       }
     });
 

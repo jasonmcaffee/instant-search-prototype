@@ -22,7 +22,7 @@ ADD . /usr/src/app
 RUN npm run build
 
 #for security reasons, do not allow docker to ever run with bypass for user authentication
-ENV BYPASS_USER_AUTH="false"
+#ENV BYPASS_USER_AUTH="false"
 
 # And go
 CMD [ "npm", "start" ]

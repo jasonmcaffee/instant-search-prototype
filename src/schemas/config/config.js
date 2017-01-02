@@ -7,6 +7,13 @@ export let configSchema = Joi.object().required()
       bypassUserAuth: Joi.string().required()
     }).meta({className: 'serverConfig'}), // so hapi swagger shows non-auto-generated model name.,
 
+    client: Joi.object().required().keys({
+      hapiBabelBaseline: Joi.object().required().keys({
+        url: Joi.string().required(),
+        getTimeout: Joi.number().required()
+      })
+    }).meta({className: 'clientConfig'}),
+
     jwt: Joi.object().required().keys({
       baseKeyPath: Joi.string().required(),
       idmPublicKeyRelativePath: Joi.string().required()
