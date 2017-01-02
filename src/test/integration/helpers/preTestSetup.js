@@ -18,6 +18,11 @@ beforeAll(async (done)=>{
   done();
 });
 
+/**
+ * Runs the 'npm run docker:runintegration' script so that an env is created we can test against.
+ * This function tries hard to ensure the docker container is killed should any problems arise during testing.
+ * @returns {Promise}
+ */
 async function setupIntegration(){
   console.log('setting up for integration testing...');
   const spawn = require('child_process').spawn;
@@ -49,6 +54,7 @@ async function setupIntegration(){
 
   });
 
+  //when a timeout occurs, jasmine doesn't run anything. by adding a reporter, we can know for sure when jasmine is done testing.
   jasmine.getEnv().addReporter({
     jasmineDone(){
       console.log('############################jasmine is done################');
