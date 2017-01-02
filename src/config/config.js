@@ -18,6 +18,8 @@ export let config = {
       let keyFolder;
       switch (environment) {
         case 'local':
+        case 'test-integration':
+        case 'test-unit':
           keyFolder = 'local';
           break;
         case 'alpha':

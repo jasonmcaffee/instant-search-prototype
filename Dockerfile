@@ -7,9 +7,6 @@ MAINTAINER Titan
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-# Define static assets directory for mounted volume
-#RUN mkdir -p /etc/babelfish
-
 # Copy over package.json to tmp dir and install into tmp dir
 # This speeds up the build as we don't need to download all modules from the internet every time
 # http://bitjudo.com/blog/2014/03/13/building-efficient-dockerfiles-node-dot-js/
