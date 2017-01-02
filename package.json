@@ -5,8 +5,6 @@
   "main": "index.js",
   "engines" : { "node" : "7.0.0" },  
   "scripts": {
-    "initial-setup": "npm install jasmine -g && npm install babel-cli -g && npm install eslint -g && npm install && npm run build",
-    "initial-setup-for-codio": "npm run codio:download-node && npm run codio:install-node && npm run initial-setup",
     "start": "node index.js",
     "eslint": "eslint ./src --fix",
     "test": "NODE_ENV=test-unit jasmine JASMINE_CONFIG_PATH=jasmine.json",
@@ -29,10 +27,7 @@
     "hapi-swaggered-ui": "^2.5.1",
     "inert": "^4.0.2",
     "joi": "^9.0.4",
-    "lodash": "^4.16.4",
     "logger": "git+http://bitbucket.is.com:7990/scm/tg/logger.git#v1.0.7",
-    "mysql": "^2.11.1",
-    "squel": "^4.2.3",
     "vision": "^4.1.0"
   },
   "devDependencies": {

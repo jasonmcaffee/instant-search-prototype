@@ -1,5 +1,5 @@
 /* eslint no-process-env: "off" */
-import Joi from 'joi';
+
 /**
  * JSON object representing the service's configuration.
  * Environment configuration should be handled via environment variables.
@@ -37,15 +37,3 @@ export let config = {
     }
   }
 };
-
-export let configSchema = Joi.object().required()
-    .keys({
-      server: Joi.object().required().keys({
-        port: Joi.string().required(),
-        bypassUserAuth: Joi.string().required()
-      }),
-      jwt: Joi.object().required().keys({
-        baseKeyPath: Joi.string().required(),
-        idmPublicKeyRelativePath: Joi.string().required()
-      })
-    });

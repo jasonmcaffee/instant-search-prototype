@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import {configSchema as configSchema} from 'config/config';
+import {configSchema} from 'schemas/config/config';
 
 export let serverStatus = Joi.object().required()
     .keys({
@@ -7,7 +7,8 @@ export let serverStatus = Joi.object().required()
             .description('true if server and all subsystems are functioning, false otherwise')
             .example(true),
       config: configSchema
-    });
+    })
+    .meta({className: 'serverStatus'}); // so hapi swagger shows non-auto-generated model name.
 
 
 export let osStatus = Joi.object().required()
@@ -88,18 +89,21 @@ export let osStatus = Joi.object().required()
             }),
 
 
-    });
+    })
+  .meta({className: 'osStatus'}); // so hapi swagger shows non-auto-generated model name.
 
 export let systemOverallStatus = Joi.object()
     .keys({
       ok: Joi.boolean().required()
             .description('true if server and all subsystems are functioning, false otherwise')
             .example(true)
-    });
+    })
+  .meta({className: 'systemOverallStatus'}); // so hapi swagger shows non-auto-generated model name.
 
 export let healthResponse = Joi.object().required()
     .keys({
       serverStatus,
       systemOverallStatus,
       osStatus
-    });
+    })
+    .meta({className: 'healthResponse'}); // so hapi swagger shows non-auto-generated model name.

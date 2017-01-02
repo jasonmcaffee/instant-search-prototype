@@ -21,11 +21,12 @@ import Joi from 'joi';
 import fs from 'fs';
 import * as hapiJWT from 'hapi-auth-jwt2';
 import * as bluebird from 'bluebird';
-import {config, configSchema} from './config/config';
+import {config} from './config/config';
+import {configSchema} from './schemas/config/config';
 import * as logger from 'logger';
 
-//strip new line chars by default. allow environment variable override.
-logger.config.stripNewLineChars = !!!process.env.STRIP_NEWLINE_CHARS;
+// strip new line chars by default. allow environment variable override.
+logger.config.stripNewLineChars = !process.env.STRIP_NEWLINE_CHARS;
 
 /**
  * Starts the hapi server, registering all routes found in the /lib/routes folder.

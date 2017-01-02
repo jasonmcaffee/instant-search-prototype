@@ -64,7 +64,7 @@ npm run build-watch
 
 ## Swagger UI
 All endpoints/handlers/routes with the 'api' tag will be made available in Swagger UI.
-The path is Swagger UI is http://localhost:1337/docs/index.html
+The path is Swagger UI is http://localhost:3000/docs
 
 ## Project Structure
 
@@ -100,6 +100,17 @@ All test files related to unit, integration, and performance tests.
 ### Babel
 allows us to use javascript features not yet implemented in node.js, such as module import/export, async await, etc.
 
+#### Plugins
+##### Async to Generator
+allow the use of await and async keywords.  This makes code much easier to reason about opposed to traditional callbacks or promises.
+e.g.
+```
+async someAsyncFunction(){
+...
+}
+
+let result = await someAsyncFunction();
+```
 ### Joi
 provides schema validation so we can validate request parameters, body, etc.
 
@@ -115,6 +126,9 @@ Unit testing framework
 
 ### ESLint
 Code standard enforcement
+
+### Hapi Auth JWT2
+Used for decrypting jwt tokens provided by IDM.
 
 
 
