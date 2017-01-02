@@ -36,6 +36,12 @@ e.g.
 docker run -it --expose=${SERVER_PORT} -p ${SERVER_PORT}:${SERVER_PORT} ...
 ```
 
+#### STRIP_NEWLINE_CHARS (optional)
+By default the logger module will remove new line chars (each new line results in a separate log entry in gray log)
+
+This can be optionally override to false so that multiline logs are emitted.
+
+
 #### BYPASS_USER_AUTH (optional)
 for local development only. if set to 'true' all endpoints won't require jwt token.
 this intentionally will not work inside of a docker container (for security reasons)
@@ -60,7 +66,34 @@ npm run build-watch
 All endpoints/handlers/routes with the 'api' tag will be made available in Swagger UI.
 The path is Swagger UI is http://localhost:1337/docs/index.html
 
-# Under the Covers
+## Project Structure
+
+### Build
+We use babel for transpilation, so a build and a build folder are needed.
+
+### Keys
+IDM public keys are needed in order to decrypt the jwt token provided by IDM.
+
+### Src
+Contains all files which are transpiled, including services, routes, tests, etc.
+
+#### Config
+Configuration files.  Typically will reference environment variables.
+
+#### Routes
+Hapi routes handle request/response for given uri paths.
+
+#### Schemas
+Joi schemas are used to validate requests, ensure response format, and other needed object validations needed.
+
+#### Services
+Most routes will validate requests then forward calls to related service methods.
+
+Services should be unaware of http concepts (errors, response handling, etc)
+
+#### Test
+All test files related to unit, integration, and performance tests.
+
 
 ## External Libraries/Packages
 

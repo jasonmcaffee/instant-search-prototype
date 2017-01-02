@@ -1,6 +1,7 @@
 /* eslint no-process-env: "off" */
 /* eslint no-sync: "off" */
 /* eslint global-require: "off" */
+
 // allow imports/requires to use non-relative paths to load other modules.
 // e.g. instead of require('../../services/health') we can use require('services/health')
 process.env.NODE_PATH = __dirname;
@@ -23,6 +24,8 @@ import * as bluebird from 'bluebird';
 import {config, configSchema} from './config/config';
 import * as logger from 'logger';
 
+//strip new line chars by default. allow environment variable override.
+logger.config.stripNewLineChars = !!!process.env.STRIP_NEWLINE_CHARS;
 
 /**
  * Starts the hapi server, registering all routes found in the /lib/routes folder.
@@ -37,7 +40,7 @@ async function startServer () {
     await registerPlugins(server);
     await loadAndRegisterRouteModules(server);
 
-    logger.log(`starting mapping service with configuration: ${JSON.stringify(config, null, 2)}`);
+    logger.log(`starting service with configuration: ${JSON.stringify(config, null, 2)}`);
 
     await server.start();
 
