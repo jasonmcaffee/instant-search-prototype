@@ -9,13 +9,9 @@
     "ecmaVersion": 8 // or 2017
   },
   "globals": {
-    "__base": false,
-    "__controllers": false,
-    "__helpers": false,
-    "__lib": false,
-    "__models": false,
-    "__services": false,
     "beforeAll": false,
+    "afterAll": false,
+    "jasmine": false,
     "expect": false,
     "pending": false,
     "spyOn": false,
