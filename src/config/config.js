@@ -9,8 +9,8 @@ export let config = {
     port: process.env.SERVER_PORT || '3000',
     bypassUserAuth: process.env.BYPASS_USER_AUTH || 'false'  // only for local development
   },
-  client:{
-    hapiBabelBaseline:{
+  client: {
+    hapiBabelBaseline: {
       url: process.env.HAPI_BABEL_URL || 'http://localhost:3000',
       getTimeout: 3000,
     }

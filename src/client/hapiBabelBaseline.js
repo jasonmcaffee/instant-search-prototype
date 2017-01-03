@@ -21,7 +21,7 @@ export const getHealthData = (token)=>{
         if (result.status !== 200 || result.error) {
           logger.error('Error response from hapi babel: \nStatus:', result.status, ' \nBody:', result.body);
           reject(result.error);
-        }else {
+        } else {
           logger.log(`Response received from /v1/health/data: ${JSON.stringify(result.body)}`);
           resolve(result.body);
         }

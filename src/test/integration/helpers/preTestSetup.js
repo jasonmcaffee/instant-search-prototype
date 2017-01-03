@@ -11,6 +11,7 @@ process.env.NODE_PATH = process.cwd() + '/build';
 require('module').Module._initPaths();
 console.log('NODE_PATH is ' + process.env.NODE_PATH);
 
+const spawn = require('child_process').spawn;
 
 beforeAll(async (done)=>{
   await setupIntegration();
@@ -23,16 +24,14 @@ beforeAll(async (done)=>{
  * This function tries hard to ensure the docker container is killed should any problems arise during testing.
  * @returns {Promise}
  */
-async function setupIntegration(){
+async function setupIntegration () {
   console.log('setting up for integration testing...');
-  const spawn = require('child_process').spawn;
-
   const ls = spawn('npm', ['run', 'docker:runintegration']);
 
   let serverStartedPromise = new Promise((resolve, reject)=>{
     ls.stdout.on('data', (data) => {
       console.log(`stdout: ${data}`);
-      if(data.indexOf('Server running') >= 0){
+      if (data.indexOf('Server running') >= 0) {
         console.log('server is running. tests can begin.');
         resolve();
       }
@@ -41,9 +40,9 @@ async function setupIntegration(){
 
     ls.stderr.on('data', (data) => {
       console.error(`stderr: ${data}`);
-      if(data.indexOf('os.tmpDir()') < 0 && data.indexOf('the input device is not a TTY') < 0){
-        //reject(data);
-        //ls.kill();//force the process to die
+      if (data.indexOf('os.tmpDir()') < 0 && data.indexOf('the input device is not a TTY') < 0) {
+        // reject(data);
+        // ls.kill();//force the process to die
       }
     });
 
@@ -54,9 +53,9 @@ async function setupIntegration(){
 
   });
 
-  //when a timeout occurs, jasmine doesn't run anything. by adding a reporter, we can know for sure when jasmine is done testing.
+  // when a timeout occurs, jasmine doesn't run anything. by adding a reporter, we can know for sure when jasmine is done testing.
   jasmine.getEnv().addReporter({
-    jasmineDone(){
+    jasmineDone () {
       console.log('############################jasmine is done################');
       ls.kill();
     }
