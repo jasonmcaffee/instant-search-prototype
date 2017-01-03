@@ -11,7 +11,7 @@
     "eslint": "eslint ./src --fix",
     "test:integration": "NODE_ENV=test-integration jasmine JASMINE_CONFIG_PATH=src/test/integration/jasmine.json",
     "test:unit": "NODE_ENV=test-unit jasmine JASMINE_CONFIG_PATH=src/test/unit/jasmine.json",
-    "test": "npm run test-unit",
+    "test": "npm run test:unit",
     "build-no-clean": "babel src --out-dir build --source-maps",
     "build-watch": "babel src --out-dir build --source-maps --watch",
     "docker:build": "docker build -t \"hapi-babel\" .",
