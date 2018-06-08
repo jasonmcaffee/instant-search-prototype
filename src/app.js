@@ -57,7 +57,7 @@ async function startServer () {
  * @param server
  */
 async function configureJwt (server) {
-  let idmPublicKey = fs.readFileSync(config.jwt.idmPublicKeyRelativePath);
+  const idmPublicKey = fs.readFileSync(config.jwt.idmPublicKeyRelativePath);
   // let serverRegisterPromisified = bluebird.promisify(server.register.bind(server));
   // await serverRegisterPromisified(hapiJWT);
   await server.register(hapiJWT);
@@ -78,7 +78,7 @@ async function configureJwt (server) {
  * @param configuration - config object typically found in config/config
  */
 async function validateConfig (configuration) {
-  let joiValidatePromisified = bluebird.promisify(Joi.validate);
+  const joiValidatePromisified = bluebird.promisify(Joi.validate);
   try {
     await joiValidatePromisified(configuration, configSchema);
   } catch (e) {
@@ -91,7 +91,7 @@ async function validateConfig (configuration) {
  * @param server - hapi server instance which will have plugins registered
  */
 async function registerPlugins (server) {
-  let pluginModules = await loadProjectPluginModules();
+  const pluginModules = await loadProjectPluginModules();
   await server.register([
     Inert, // Static file and directory handlers plugin for hapi.js.
     Vision, // Templates rendering plugin support for hapi.js.
@@ -124,8 +124,8 @@ async function registerPlugins (server) {
  * @returns {*|Array}
  */
 async function loadProjectPluginModules () {
-  let pluginFilePaths = await glob('./plugins/**/*.js', {cwd: './build'});
-  let pluginModules = pluginFilePaths.map((filePath)=>{
+  const pluginFilePaths = await glob('./plugins/**/*.js', {cwd: './build'});
+  const pluginModules = pluginFilePaths.map((filePath)=>{
     let pluginModule = require(filePath);//eslint-disable-line
     return pluginModule.default;
   });
