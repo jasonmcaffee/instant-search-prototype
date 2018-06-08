@@ -20,6 +20,7 @@ export default {
     },
     handler: async (request, h) => {
       const result = await healthService.getHealth();
+      throw new Error('aaaaaahhhhhh')
       return result;
     }
   }

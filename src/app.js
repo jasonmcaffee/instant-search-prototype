@@ -151,33 +151,11 @@ async function loadAndRegisterRouteModules (server) {
     if (config.server.bypassUserAuth !== 'true' && routeModule.default.config.auth !== false) {
       routeModule.default.config.auth = 'jwt'; // by default all routes will use jwt authentication.
     }
-
-    let originalHandler = routeModule.default.config.handler;
-    routeModule.default.config.handler = handlerWrapper(originalHandler);
     return routeModule.default;
   });
 
   server.route(routeModules);
 }
-
-/**
- * Wrap all handlers with this function so we don't have to do a try catch block in every handler.
- * @param originalHandler
- * @returns {function(*=, *=)}
- */
-function handlerWrapper (originalHandler) {
-  return async (req, reply)=>{
-    try {
-      let result = await originalHandler(req, reply);
-      return result;
-    } catch (e) {
-      let error = e instanceof Error ? e : new Error(e);
-      logger.error(`Error was encountered: ${e.stack}`);
-      return reply(Boom.wrap(error, 500, 'uncaught exception in handler function'));
-    }
-  };
-}
-
 
 /**
  * Creates a node cluster so that each cpu core can be used.
