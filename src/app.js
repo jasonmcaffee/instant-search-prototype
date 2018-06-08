@@ -33,7 +33,7 @@ logger.config.stripNewLineChars = !process.env.STRIP_NEWLINE_CHARS;
 async function startServer () {
   try {
     // Create a server with a host and port
-    const server = new Hapi.server({port: config.server.port});
+    const server = new Hapi.server({port: config.server.port, address: config.server.address});
     await validateConfig(config);
     // server.connection({port: config.server.port});
     await configureJwt(server);
@@ -44,7 +44,7 @@ async function startServer () {
 
     await server.start();
 
-    logger.log('Server running at:', server.info.uri);
+    logger.log('Server running at:', server.info.address);
   } catch (err) {
     logger.error(`error: ${err.stack}`);
   }
