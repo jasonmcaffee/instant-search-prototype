@@ -2,6 +2,7 @@
 
 import * as logger from 'logger';
 const Boom = require('boom');
+import {BadRequestError, DataConflictError, DataNotFoundError, ForbiddenError} from 'errors/errors';
 
 /**
  * Plugin for mapping handler/controller exceptions/errors to http error status codes.
@@ -17,7 +18,18 @@ export default {
       if(!response.isBoom){return;}
       let error = response instanceof Error ? response : new Error(response);
       logger.error(`Error was encountered: ${error.stack}`);
-      return Boom.boomify(error, {statusCode: 500});
+      switch (true) {
+        case response instanceof DataNotFoundError:
+          return Boom.notFound(response.message);
+        case response instanceof DataConflictError:
+          return Boom.conflict(response.message);
+        case response instanceof ForbiddenError:
+          return Boom.forbidden(response.message);
+        case response instanceof BadRequestError:
+          return Boom.badRequest(response.message);
+        default:
+          return Boom.boomify(error, {statusCode: 500});
+      }
     });
   }
 };
