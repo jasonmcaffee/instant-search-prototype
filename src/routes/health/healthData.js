@@ -1,6 +1,5 @@
 import {health as healthService} from 'services/health/health.js';
 import {healthResponse as healthResponseSchema} from 'schemas/health/health';
-import {BadRequestError, DataConflictError, DataNotFoundError, ForbiddenError} from 'errors/errors';
 export default {
   method: 'GET',
   path: '/v1/health/data',
@@ -20,7 +19,6 @@ export default {
     },
     handler: async (request, h) => {
       const result = await healthService.getHealth();
-      throw new BadRequestError('aaaaaahhhhhh');
       return result;
     }
   }
