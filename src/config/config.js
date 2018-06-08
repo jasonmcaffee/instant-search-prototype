@@ -4,7 +4,7 @@
  * JSON object representing the service's configuration.
  * Environment configuration should be handled via environment variables.
  */
-export let config = {
+export const config = {
   server: {
     port: process.env.SERVER_PORT || '3000',
     bypassUserAuth: process.env.BYPASS_USER_AUTH || 'false'  // only for local development
