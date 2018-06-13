@@ -6,28 +6,28 @@ import * as os from 'os';
  * e.g. ensuring we can connect to couchbase and various other dbs.
  * @type {{health, couchbaseStatus, serverStatus, osStatus}}
  */
-export let service = {
+export const health = {
 
   /**
    * Returns summary of system health, including db connectivity, os info, etc.
    * @returns {Promise.<{systemOverallStatus: *, serverStatus: *, osStatus: *}>}
    */
-  getHealth: async function () {
-    let serverStatus = this.serverStatus;
-    let osStatus = this.osStatus;
-    let subsystemStatuses = [
+  async getHealth() {
+    const serverStatus = this.serverStatus;
+    const osStatus = this.osStatus;
+    const subsystemStatuses = [
       serverStatus,
       osStatus
     ];
 
     // iterate over each status and if one is not ok, the overall status will not be ok.
-    let systemOverallStatus = subsystemStatuses.reduce((previous, current)=>{
+    const systemOverallStatus = subsystemStatuses.reduce((previous, current)=>{
       return {
         ok: previous.ok && current.ok
       };
     });
 
-    let status = {
+    const status = {
       systemOverallStatus,
       serverStatus,
       osStatus

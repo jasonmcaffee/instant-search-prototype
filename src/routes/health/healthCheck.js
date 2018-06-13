@@ -7,13 +7,11 @@ export default {
   path: '/v1/healthcheck',
   config: {
     auth: false, // allow aws target group health check to access without jwt token.
-    description: 'returns 200 if app is functioning.  does not check subsystems, as AWS will restart if this returns anything but 200',
-    get notes () {
-      return this.description;
-    },
+    description: 'Returns 200 if app is functioning.',
+    notes: `Does not check subsystems, as AWS will restart if this returns anything but 200`,
     tags: ['api'], // api tag is for hapi swagger generation
-    handler: (request, reply) => {
-      return reply();
+    handler: (request, h) => {
+      return {};
     }
   }
 };
