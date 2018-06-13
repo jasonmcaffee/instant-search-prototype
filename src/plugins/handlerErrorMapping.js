@@ -15,7 +15,7 @@ export default {
     //hook for right after handler returns, and right before response goes back to client.
     server.ext('onPreResponse', function (request, h) {
       const {response} = request;
-      if(!response.isBoom){return;}
+      if(!response.isBoom){return response;}
       let error = response instanceof Error ? response : new Error(response);
       logger.error(`Error was encountered: ${error.stack}`);
       switch (true) {

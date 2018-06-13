@@ -19,7 +19,7 @@ export default {
     });
 
     // listen to all responses
-    server.events.on('response', (request)=> {
+    server.events.on('response', async (request)=> {
       const endTime = Date.now();
       const duration = endTime - request.plugins.startTime;
       const {authorization, ...headersWithTokenOmmitted} = request.headers; //eslint-disable-line

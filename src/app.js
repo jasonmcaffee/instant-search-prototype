@@ -36,7 +36,7 @@ async function startServer () {
     const server = new Hapi.server({port: config.server.port, address: config.server.address});
     await validateConfig(config);
     // server.connection({port: config.server.port});
-    await configureJwt(server);
+    // await configureJwt(server);
     await registerPlugins(server);
     await loadAndRegisterRouteModules(server);
 
@@ -56,22 +56,22 @@ async function startServer () {
  * If the token is invalid or expired, an unauthorized exception is thrown.
  * @param server
  */
-async function configureJwt (server) {
-  const idmPublicKey = fs.readFileSync(config.jwt.idmPublicKeyRelativePath);
-  // let serverRegisterPromisified = bluebird.promisify(server.register.bind(server));
-  // await serverRegisterPromisified(hapiJWT);
-  await server.register(hapiJWT);
-  server.auth.strategy('jwt', 'jwt', {
-    key: idmPublicKey,
-    async validate(decoded, request){
-      // add the token user to the request so handlers have access to it. e.g. to check capabilities.
-      const isValid = isNaN(decoded.id);
-      request.jwt = {tokenUser: decoded};
-      return {isValid};
-    }, // as long as they have the token they are valid.
-    verifyOptions: {algorithms: ['RS256']}
-  });
-}
+// async function configureJwt (server) {
+//   const idmPublicKey = fs.readFileSync(config.jwt.idmPublicKeyRelativePath);
+//   // let serverRegisterPromisified = bluebird.promisify(server.register.bind(server));
+//   // await serverRegisterPromisified(hapiJWT);
+//   await server.register(hapiJWT);
+//   server.auth.strategy('jwt', 'jwt', {
+//     key: idmPublicKey,
+//     async validate(decoded, request){
+//       // add the token user to the request so handlers have access to it. e.g. to check capabilities.
+//       const isValid = isNaN(decoded.id);
+//       request.jwt = {tokenUser: decoded};
+//       return {isValid};
+//     }, // as long as they have the token they are valid.
+//     verifyOptions: {algorithms: ['RS256']}
+//   });
+// }
 
 /**
  * Validates that appropriate environment variables were passed in. (
