@@ -24,9 +24,12 @@ export const config = {
       let keyFolder;
       switch (environment) {
         case 'local':
+          keyFolder = 'local';
+          break;
         case 'test-integration':
         case 'test-unit':
-          keyFolder = 'local';
+          keyFolder = 'test';
+          keyFileName = 'fake_public_key.pem';
           break;
         case 'alpha':
           keyFolder = 'alpha';
@@ -42,6 +45,11 @@ export const config = {
       }
       let keyPath = `${baseRelativePathForKey}/${keyFolder}/${keyFileName}`;
       return keyPath;
+    }
+  },
+  tests: {
+    integration: {
+      runInDocker: process.env.INT_TEST_RUN_IN_DOCKER === 'false' ? false : true
     }
   }
 };

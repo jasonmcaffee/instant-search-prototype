@@ -30,6 +30,7 @@
     "hapi-swagger": "^9.1.1",
     "inert": "^5.1.0",
     "joi": "^13.4.0",
+    "jsonwebtoken": "^8.3.0",
     "logger": "git+http://bitbucket.is.com:7990/scm/tg/logger.git#v1.1.0",
     "unirest": "^0.5.1",
     "vision": "^5.3.3"

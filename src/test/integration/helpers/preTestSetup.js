@@ -13,8 +13,12 @@ console.log('NODE_PATH is ' + process.env.NODE_PATH);
 
 const spawn = require('child_process').spawn;
 
+import {config} from '../../../config/config';
+
 beforeAll(async (done)=>{
-  await setupIntegration();
+  if (config.tests.integration.runInDocker) {
+    await setupIntegration();
+  }
   console.log('starting integration tests....');
   done();
 });
