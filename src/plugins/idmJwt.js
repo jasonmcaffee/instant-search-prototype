@@ -1,5 +1,3 @@
-/* eslint no-nested-ternary: "off" */
-
 import * as logger from 'logger';
 import {config} from '../config/config';
 import * as hapiJWT from 'hapi-auth-jwt2';
@@ -13,9 +11,8 @@ export default {
   name: 'idmJwt',
   version: '1.0.0',
   async register(server, options){
+    console.log(`idmJwt plugin`);
     const idmPublicKey = fs.readFileSync(config.jwt.idmPublicKeyRelativePath);
-    // let serverRegisterPromisified = bluebird.promisify(server.register.bind(server));
-    // await serverRegisterPromisified(hapiJWT);
     await server.register(hapiJWT);
     server.auth.strategy('jwt', 'jwt', {
       key: idmPublicKey,
@@ -27,5 +24,6 @@ export default {
       }, // as long as they have the token they are valid.
       verifyOptions: {algorithms: ['RS256']}
     });
+    console.log(`idmJwt done`);
   }
 };

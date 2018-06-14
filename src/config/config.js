@@ -8,7 +8,6 @@ export const config = {
   server: {
     port: process.env.SERVER_PORT || '3000',
     address: process.env.SERVER_ADDRESS || 'localhost',
-    bypassUserAuth: process.env.BYPASS_USER_AUTH || 'false'  // only for local development
   },
   client: {
     hapiBabelBaseline: {

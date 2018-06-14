@@ -5,7 +5,6 @@ export let configSchema = Joi.object().required()
     server: Joi.object().required().keys({
       port: Joi.string().required(),
       address: Joi.string().required(),
-      bypassUserAuth: Joi.string().required()
     }).meta({className: 'serverConfig'}), // so hapi swagger shows non-auto-generated model name.,
 
     client: Joi.object().required().keys({

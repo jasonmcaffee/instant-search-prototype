@@ -27,6 +27,8 @@ export default {
           return Boom.forbidden(response.message);
         case response instanceof BadRequestError:
           return Boom.badRequest(response.message);
+        case response.message === "Missing authentication":
+          return Boom.unauthorized(response.message);
         default:
           return Boom.boomify(error, {statusCode: 500});
       }
