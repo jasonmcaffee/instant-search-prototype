@@ -4,7 +4,7 @@ export default {
   method: 'GET',
   path: '/v1/health/data',
   config: {
-    description: `Returns data about the health of the service and its dependenices`,
+    description: `Returns data about the health of the service and its dependencies`,
     notes: `gets the system status data and returns as a json object, regardless of health status.`,
     tags: ['api'], // api tag is for hapi swagger generation
     validate: {
