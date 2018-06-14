@@ -8,7 +8,6 @@ export const config = {
   server: {
     port: process.env.SERVER_PORT || '3000',
     address: process.env.SERVER_ADDRESS || 'localhost',
-    bypassUserAuth: process.env.BYPASS_USER_AUTH || 'false'  // only for local development
   },
   client: {
     hapiBabelBaseline: {
@@ -25,9 +24,12 @@ export const config = {
       let keyFolder;
       switch (environment) {
         case 'local':
+          keyFolder = 'local';
+          break;
         case 'test-integration':
         case 'test-unit':
-          keyFolder = 'local';
+          keyFolder = 'test';
+          keyFileName = 'fake_public_key.pem';
           break;
         case 'alpha':
           keyFolder = 'alpha';
@@ -43,6 +45,11 @@ export const config = {
       }
       let keyPath = `${baseRelativePathForKey}/${keyFolder}/${keyFileName}`;
       return keyPath;
+    }
+  },
+  tests: {
+    integration: {
+      runInDocker: process.env.INT_TEST_RUN_IN_DOCKER === 'false' ? false : true
     }
   }
 };

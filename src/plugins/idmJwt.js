@@ -1,0 +1,29 @@
+import * as logger from 'logger';
+import {config} from '../config/config';
+import * as hapiJWT from 'hapi-auth-jwt2';
+import fs from 'fs';
+
+/**
+ * Plugin for logging details for every request that comes through the server.
+ * http://hapijs.com/tutorials/plugins
+ */
+export default {
+  name: 'idmJwt',
+  version: '1.0.0',
+  async register(server, options){
+    console.log(`idmJwt plugin`);
+    const idmPublicKey = fs.readFileSync(config.jwt.idmPublicKeyRelativePath);
+    await server.register(hapiJWT);
+    server.auth.strategy('jwt', 'jwt', {
+      key: idmPublicKey,
+      async validate(decoded, request){
+        // add the token user to the request so handlers have access to it. e.g. to check capabilities.
+        const isValid = isNaN(decoded.id);
+        request.jwt = {tokenUser: decoded};
+        return {isValid};
+      }, // as long as they have the token they are valid.
+      verifyOptions: {algorithms: ['RS256']}
+    });
+    console.log(`idmJwt done`);
+  }
+};

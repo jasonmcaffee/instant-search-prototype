@@ -1,7 +1,6 @@
-import * as rest from 'unirest';
 import {config} from 'config/config';
 import * as logger from 'logger';
-
+import fetch from 'node-fetch';
 let hapiBabelUrl = config.client.hapiBabelBaseline.url;
 
 /**
@@ -10,22 +9,13 @@ let hapiBabelUrl = config.client.hapiBabelBaseline.url;
  * @param token
  * @returns {Promise}
  */
-export const getHealthData = (token)=>{
-  return new Promise((resolve, reject)=>{
-    let url = hapiBabelUrl + '/v1/health/data';
-    logger.log(`getting health data using url: ${url}`);
-    rest.get(url)
-      .timeout(config.client.hapiBabelBaseline.getTimeout)
-      .header({'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'})
-      .end(result=>{
-        if (result.status !== 200 || result.error) {
-          logger.error('Error response from hapi babel: \nStatus:', result.status, ' \nBody:', result.body);
-          reject(result.error);
-        } else {
-          logger.log(`Response received from /v1/health/data: ${JSON.stringify(result.body)}`);
-          resolve(result.body);
-        }
-      });
-  });
+export const getHealthData = async (token)=>{
+  const url = hapiBabelUrl + '/v1/health/data';
+  logger.log(`getting health data using url: ${url}`);
 
+  const result = await fetch(url, {headers: {'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'}});
+  const body = await result.text();
+
+  return body;
 };
+

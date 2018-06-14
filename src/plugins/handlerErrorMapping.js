@@ -15,9 +15,8 @@ export default {
     //hook for right after handler returns, and right before response goes back to client.
     server.ext('onPreResponse', function (request, h) {
       const {response} = request;
-      if(!response.isBoom){return;}
-      let error = response instanceof Error ? response : new Error(response);
-      logger.error(`Error was encountered: ${error.stack}`);
+      if(!response.isBoom){return response;}
+      logger.error(`Error was encountered: ${response.stack}`);
       switch (true) {
         case response instanceof DataNotFoundError:
           return Boom.notFound(response.message);
@@ -27,7 +26,10 @@ export default {
           return Boom.forbidden(response.message);
         case response instanceof BadRequestError:
           return Boom.badRequest(response.message);
+        case response instanceof Error:
+          return response;
         default:
+          const error = response instanceof Error ? response : new Error(response);
           return Boom.boomify(error, {statusCode: 500});
       }
     });
