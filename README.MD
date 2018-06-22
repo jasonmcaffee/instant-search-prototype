@@ -17,6 +17,10 @@ npm install babel-cli -g
 npm install eslint -g
 npm install nodemon -g
 npm install jasmine -g
+
+#open a new terminal window or set the source for your bash profile
+
+#install local modules
 npm install
 
 #test running the build
