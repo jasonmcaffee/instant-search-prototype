@@ -17,6 +17,9 @@ export default {
     response: {
       schema: healthResponseSchema
     },
+    plugins: {
+      permissionsWithinOrg: ['admin_any_org']
+    },
     handler: async (request, h) => {
       const result = await healthService.getHealth();
       return result;
