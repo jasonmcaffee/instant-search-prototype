@@ -29,6 +29,15 @@ export default {
       if (routeModule.default.config.auth !== false) {
         routeModule.default.config.auth = 'jwt'; // by default all routes will use jwt authentication.
       }
+
+      // Add CORS to each route
+      routeModule.default.config.cors = {
+        origin: ['*'],
+        credentials: true,
+        additionalHeaders: ['cache-control', 'x-requested-with']
+      };
+
+
       return routeModule.default;
     });
 
