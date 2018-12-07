@@ -1,7 +1,17 @@
 
-export function search({query}) {
-  const results = createSearchResults();
-  return results;
+export async function search({query}) {
+  return new Promise((resolve, reject)=>{
+    const results = createSearchResults();
+    const result = {
+      query,
+      results,
+    };
+    const randomMsWait = generateRandomNumber(200, 6000);
+    setTimeout(()=>{
+      resolve(result);
+    }, randomMsWait);
+  });
+
 }
 
 export function createSearchResults(max=generateRandomNumber(1, 200)){

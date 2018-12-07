@@ -19,8 +19,9 @@ export default {
       //schema: someSchemaTheResponseAdheresTo
     },
     handler: async (request, reply) => {
-      const query = '';
-      let result = search({query});
+      const query = request.query.q;
+      console.log('query: ', query);
+      let result = await search({query});
       return result;
     }
   }
