@@ -1,21 +1,44 @@
-# Hapi, Babel, etc Baseline
-Fork this project and use it as a baseline for new service development
+# Real Time Search Testing
+Project to explore options for real time search needed in provisioner.
+
+## Approaches
+All approaches should:
+- try to limit searches
+
+### Ajax with Keep Alive
+Ajax requests are made with connection keep alive headers so we don't have to re-establish connection with each search.
+
+Don't perform a search while request is open.
+
+## Testing
+
+### Connection Keep Alive
+
+#### Curl
+To test that the server you are hitting supports connection keep alive, run this:
+```
+curl -Iv http://localhost:3000/v1/search?q=a 2>&1 | grep -i 'connection #0'
+```
+Verify the result is:
+```
+Connection #0 to host localhost left intact
+```
 
 ## Setup
+
+### Service
 Run these install steps
 ```
 # install nvm so we can switch between versions of node
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 
 #install and use latest version of node
-nvm install node
-nvm use node
+nvm install 10.4
+nvm use 10.4
 
 #install global modules
-npm install nodemon -g
 npm install babel-cli -g
 npm install eslint -g
-npm install nodemon -g
 npm install jasmine -g
 
 #open a new terminal window or set the source for your bash profile
@@ -27,80 +50,13 @@ npm install
 npm run build
 
 ```
-Since we are using babel for transpilation, a build step is required (npm run build)
 
-### Environment Variables
-Rather than having different configs for each environment, we will have 1 config which references environment variables.
+### Web App
+```
+cd web-app
+npm install
 
-#### NODE_ENV (required)
-in order to read the idm_public_key.pem from the correct subfolder in keys dir, must be set to one of the following:
 ```
-local
-alpha
-beta
-production
-```
-
-#### SERVER_PORT (required)
-port the server listens on.  this will be used for docker:run npm scripts.  the port will be exposed and mapped to same port on host.
-e.g.
-```
-docker run -it --expose=${SERVER_PORT} -p ${SERVER_PORT}:${SERVER_PORT} ...
-```
-
-#### STRIP_NEWLINE_CHARS (optional)
-By default the logger module will remove new line chars (each new line results in a separate log entry in gray log)
-
-This can be optionally override to false so that multiline logs are emitted.
-
-#### BASE_KEY_PATH (optional)
-defaults to relative path of './keys'
-
-### Running Locally
-After each change, you'll want to build and restart your service.
-This can be done automatically by using babel file watch(for auto building) and nodemon (for auto service restart)
-#### nodemon
-With this option, any changes made to js files will automatically update the service so you don't have to build or restart.
-```
-NODE_ENV=local nodemon index.js
-```
-
-#### babel file watch compilation
-To have babel build files on change, rather than explicitly having to rebuild after each change, run:
-```
-npm run build-watch
-```
-
-#### Webstorm Configuration
-Assuming you want to run nodemon with IDE debugging, you can setup a new Node.js run configuration similar to:
-
-Node interpreter:
-```
-~/.nvm/versions/node/v10.4.0/bin/node
-```
-Node parameters:
-```
-/Users/jason.mcaffee/.nvm/versions/node/v10.4.0/bin/nodemon --inspect=3001
-```
-Working directory:
-```
-~/Documents/dev/hapi-babel-baseline
-```
-Javascript file:
-```
-index.js
-```
-Application Parameters:
-
-Environment Variables:
-```
-NODE_ENV=local;STRIP_NEWLINE_CHARS=false;
-```
-
-## Swagger UI
-All endpoints/handlers/routes with the 'api' tag will be made available in Swagger UI.
-The path is Swagger UI is http://localhost:3000/docs
-
 ## Project Structure
 
 ### Build

@@ -13,7 +13,8 @@
   "dependencies": {
     "babel-runtime": "6.x",
     "react": "^16.7.0-alpha.2",
-    "react-dom": "^16.7.0-alpha.2"
+    "react-dom": "^16.7.0-alpha.2",
+    "react-table": "^6.8.6"
   },
   "devDependencies": {
     "babel-core": "6.x",

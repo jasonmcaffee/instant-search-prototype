@@ -11,7 +11,6 @@ export async function search({query}) {
       resolve(result);
     }, randomMsWait);
   });
-
 }
 
 export function createSearchResults(max=generateRandomNumber(1, 200)){
@@ -23,9 +22,8 @@ export function createSearchResults(max=generateRandomNumber(1, 200)){
 }
 
 function createSearchResult({userId=generateRandomNumber(1, 99999), idmGuid=generateRandomString('guid'), username=generateRandomString('username'),
-                            firstName=generateRandomString('first'), lastName=generateRandomString('last'), orgId=generateRandomNumber(1, 99999),
-                            orgName=generateRandomString('org'), pod=generateRandomString('pod')}={}){
-
+      firstName=generateRandomString('first'), lastName=generateRandomString('last'), orgId=generateRandomNumber(1, 99999),
+      orgName=generateRandomString('org'), pod=generateRandomString('pod')}={}){
   return {
     user:{
       id: userId,
