@@ -3,7 +3,7 @@ import {CHANGE_SEARCH_QUERY, CHANGE_SEARCH_RESULT} from './actions';
 
 /**
  * Reducer for changing the ui
- * @param state - default state is provided by the store
+ * @param state - represents the apps state.search. Redux does some magic where we don't have to look at state.search. Default state is provided by the store.
  * @param action
  * @returns {*}
  */

@@ -8,12 +8,13 @@ import { combineReducers } from 'redux';
 
 const searchDefaultState = {
   //the input text value
-  searchQuery: 'tacos',
+  searchQuery: '',
   //result returned from the web service
   searchResult: {
     query: '',
     results: [],
   },
+  //how SearchPresentation should format the react table.
   searchResultTableColumns: [
     {
       Header: "User",
