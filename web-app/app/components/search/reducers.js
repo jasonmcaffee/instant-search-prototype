@@ -1,26 +1,13 @@
 
 import {CHANGE_SEARCH_QUERY, CHANGE_SEARCH_RESULT} from './actions';
 
-const defaultState = {
-  //the input text value
-  searchQuery: '',
-  //result returned from the web service
-  searchResult: {
-    query: '',
-    results: [],
-  },
-  searchResultTableColumns: [
-    {
-      Header: "User",
-      columns: [
-        { Header: "First", accessor: "user.firstName" },
-        { Header: "Last", accessor: "user.lastName", },
-      ]
-    },
-  ],
-};
-
-function search(state = defaultState, action) {
+/**
+ * Reducer for changing the ui
+ * @param state - default state is provided by the store
+ * @param action
+ * @returns {*}
+ */
+function search(state={}, action) {
   switch (action.type) {
     case CHANGE_SEARCH_QUERY:
       return {...state, searchQuery: action.searchQuery};

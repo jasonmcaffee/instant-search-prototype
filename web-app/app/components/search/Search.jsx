@@ -3,7 +3,7 @@ import SearchPresentation from './SearchPresentation';
 import { connect } from 'react-redux'
 
 const mapStateToProps = state => {
-  return state;
+  return state.search;
 };
 
 const mapDispatchToProps = dispatch => {
