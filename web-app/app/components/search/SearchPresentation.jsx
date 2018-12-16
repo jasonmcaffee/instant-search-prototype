@@ -36,7 +36,7 @@ export default function SearchPresentation({searchQuery, searchResult={query:'',
       <div>
         Search result count {searchResultCount}
       </div>
-      <ReactTable columns={searchResultTableColumns} data={searchResult.results} defaultPageSize={10} className="-striped -highlight" showPagination={false} defaultPageSize={-1}/>
+      <ReactTable columns={searchResultTableColumns} data={searchResult.results} className="-striped -highlight" showPagination={false} defaultPageSize={-1}/>
     </div>
   );
 }
