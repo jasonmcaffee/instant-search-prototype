@@ -14,6 +14,8 @@ const searchDefaultState = {
     query: '',
     results: [],
   },
+  //how many searches/fetches/requests are currently active
+  activeSearchCount: 0,
   //how SearchPresentation should format the react table.
   searchResultTableColumns: [
     {
@@ -23,6 +25,14 @@ const searchDefaultState = {
         { Header: "Last", accessor: "user.lastName", },
       ]
     },
+    {
+      Header: "Org",
+      columns:[
+        { Header: "Name", accessor: "org.orgName" },
+        { Header: "ID", accessor: "org.orgId" },
+        { Header: "Pod", accessor: "org.pod" },
+      ]
+    }
   ],
 };
 

@@ -1,5 +1,5 @@
 
-import {CHANGE_SEARCH_QUERY, CHANGE_SEARCH_RESULT} from './actions';
+import {CHANGE_SEARCH_QUERY, CHANGE_SEARCH_RESULT, CHANGE_ACTIVE_SEARCH_COUNT} from './actions';
 
 /**
  * Reducer for changing the ui
@@ -13,6 +13,8 @@ function search(state={}, action) {
       return {...state, searchQuery: action.searchQuery};
     case CHANGE_SEARCH_RESULT:
       return {...state, searchResult: action.searchResult};
+    case CHANGE_ACTIVE_SEARCH_COUNT:
+      return {...state, activeSearchCount: action.activeSearchCount};
     default:
       return state
   }
