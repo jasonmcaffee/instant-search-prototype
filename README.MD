@@ -1,14 +1,13 @@
 # Real Time Search Testing
 Project to explore options for real time search needed in provisioner.
 
-## Approaches
-All approaches should:
-- try to limit searches
+## Approach
 
 ### Ajax with Keep Alive
 Ajax requests are made with connection keep alive headers so we don't have to re-establish connection with each search.
 
-Don't perform a search while request is open.
+### Explore Search Options
+The web app offers demos fo several approaches to searching, including limiting max number of searches at a time, debouncing, etc.
 
 ## Testing
 

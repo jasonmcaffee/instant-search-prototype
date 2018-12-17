@@ -105,21 +105,73 @@ export function fetchSearchResultV2({searchQuery}){
   }
 }
 
+/**
+ * Allows multiple requests at the same time, but only displays the results if they match the current query.
+ * @param searchQuery
+ * @returns {function(*, *)}
+ */
 export function fetchSearchResultV3({searchQuery}){
   return async (dispatch, getState)=>{
-    try {
-      dispatch(incrementActiveSearchCount());
-      const searchResult = await search({q: searchQuery});
-      dispatch(decrementActiveSearchCount());
+    await fetchSearchResultsButOnlyDisplayCurrentQueryResults({searchQuery, dispatch, getState});
+  }
+}
 
-      //only display the result for the query that matches current query
-      const currentSearchQuery = getState().search.searchQuery;
-      if(searchResult.query === currentSearchQuery){
-        dispatch(changeSearchResult({searchResult}));
-      }
-    } catch(e) {
-      console.error('error performing search: ', e);
-      dispatch(decrementActiveSearchCount());
+async function fetchSearchResultsButOnlyDisplayCurrentQueryResults({searchQuery, dispatch, getState}){
+  try {
+    dispatch(incrementActiveSearchCount());
+    const searchResult = await search({q: searchQuery});
+    dispatch(decrementActiveSearchCount());
+
+    //only display the result for the query that matches current query
+    const currentSearchQuery = getState().search.searchQuery;
+    if(searchResult.query === currentSearchQuery){
+      dispatch(changeSearchResult({searchResult}));
+    }
+  } catch(e) {
+    console.error('error performing search: ', e);
+    dispatch(decrementActiveSearchCount());
+  }
+}
+
+const debouncedFetchSearchResultV4 = debounce({func: fetchSearchResultsButOnlyDisplayCurrentQueryResults, waitMs: 1000});
+
+export function fetchSearchResultV4({searchQuery}){
+  return async (dispatch, getState)=>{
+    return debouncedFetchSearchResultV4({searchQuery, dispatch, getState});
+  }
+}
+
+function debounce({func, waitMs}){
+  let lastCallTime;
+  let timeoutId;
+  async function wrappedFunc(...args){
+    //invoke immediately if the function has never been called before
+    if(lastCallTime === undefined){
+      lastCallTime = Date.now();
+      return func(...args);
+    }
+
+    const msSinceLastCallTime = Date.now() - lastCallTime;
+    const msUntilNextCallTime = waitMs - msSinceLastCallTime;
+    console.log(`msSinceLastCallTime: ${msSinceLastCallTime} msUntilNextCallTime: ${msUntilNextCallTime}`);
+    if(msUntilNextCallTime > 0){
+      console.log(`enough time hasn't transpired so we will wait to call this function.`);
+      clearTimeout(timeoutId);
+      const p = new Promise((resolve, reject)=>{
+        timeoutId = setTimeout(()=>{
+          console.log('setTimeout calling func now: ', ...args);
+          lastCallTime = Date.now();
+          resolve(func(...args));
+        }, msUntilNextCallTime);
+      });
+      const result = await p;
+      return result;
+    }else{
+      clearTimeout(timeoutId);
+      console.log(`immediately calling function`);
+      lastCallTime = Date.now();
+      return func(...args);
     }
   }
+  return wrappedFunc;
 }

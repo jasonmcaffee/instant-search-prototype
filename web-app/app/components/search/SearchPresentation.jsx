@@ -26,6 +26,13 @@ export default function SearchPresentation({searchQuery, searchResult={query:'',
         {spinner}
       </div>
 
+      <div className="search-type">
+        <div>v4 debounces how often search can be performed. it uses v3 approach, but only allows it to be called once every second</div>
+        <input type="text" value={searchQuery} onChange={onSearchQueryInputChange.bind(null, 'v4')} />
+        {spinner}
+      </div>
+
+
       <hr/>
       <div>
         Results for query {searchResult.query}
@@ -43,12 +50,12 @@ export default function SearchPresentation({searchQuery, searchResult={query:'',
 
 function loadingSpinner(){
   return(
-    <div class="spinner">
-      <div class="rect1"></div>
-      <div class="rect2"></div>
-      <div class="rect3"></div>
-      <div class="rect4"></div>
-      <div class="rect5"></div>
+    <div className="spinner">
+      <div className="rect1"></div>
+      <div className="rect2"></div>
+      <div className="rect3"></div>
+      <div className="rect4"></div>
+      <div className="rect5"></div>
     </div>
   );
 }
