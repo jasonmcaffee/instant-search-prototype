@@ -1,4 +1,4 @@
-import { changeSearchQuery, fetchSearchResultV1, fetchSearchResultV2, fetchSearchResultV3, fetchSearchResultV4, } from './actions';
+import { changeSearchQuery, fetchSearchResultV1, fetchSearchResultV2, fetchSearchResultV3, fetchSearchResultV4, fetchSearchResultsV5} from './actions';
 import SearchPresentation from './SearchPresentation';
 import { connect } from 'react-redux'
 
@@ -42,6 +42,10 @@ const mapDispatchToProps = dispatch => {
           break;
         case 'v4':
           dispatch(fetchSearchResultV4({searchQuery}));
+          break;
+        case 'v5':
+          console.log('dispatching fetch v5');
+          dispatch(fetchSearchResultsV5({searchQuery}));
           break;
         default:
           console.error('no search type was provided on search query input change event');

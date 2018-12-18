@@ -4,6 +4,9 @@ import { createStore, applyMiddleware } from 'redux';
 import searchReducer from '../components/search/reducers';
 const loggerMiddleware = createLogger();
 import { combineReducers } from 'redux';
+import {createEpicMiddleware, combineEpics} from 'redux-observable';
+import {fetchSearchResultV5Epic} from '../components/search/actions';
+
 
 
 const searchDefaultState = {
@@ -40,11 +43,19 @@ const initialState = {
   search: searchDefaultState,
 };
 
+//rxjs + redux observable
+const epicMiddleware = createEpicMiddleware();
+// const rootEpic = combineEpics(fetchSearchResultV5Epic);
+
+
 export default createStore(
   combineReducers({search:searchReducer}),
   initialState,
   applyMiddleware(
+    epicMiddleware, //rx js
     thunkMiddleware, // lets us dispatch() functions
-    loggerMiddleware // neat middleware that logs actions
+    loggerMiddleware, // neat middleware that logs actions
   )
 );
+
+epicMiddleware.run(fetchSearchResultV5Epic);

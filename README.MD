@@ -1,3 +1,7 @@
+#TODO
+- rx.js v5,  don't search until typing has stopped for N ms (ask Merilee)
+- look for instant search component.
+
 # Real Time Search Testing
 Project to explore options for real time search needed in provisioner.
 

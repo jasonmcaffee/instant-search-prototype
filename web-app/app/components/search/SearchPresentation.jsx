@@ -32,6 +32,11 @@ export default function SearchPresentation({searchQuery, searchResult={query:'',
         {spinner}
       </div>
 
+      <div className="search-type">
+        <div>v5 uses rx js</div>
+        <input type="text" value={searchQuery} onChange={onSearchQueryInputChange.bind(null, 'v5')} />
+        {spinner}
+      </div>
 
       <hr/>
       <div>

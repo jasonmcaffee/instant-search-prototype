@@ -1,10 +1,106 @@
 import {search} from '../../client/searchClient';
+import {debounce, mergeMap, map, filter, concat, flatMap, startWith, endWith} from 'rxjs/operators';
+import {timer, of, from,} from 'rxjs';
+import {ofType, } from 'redux-observable';
+
 /*
  * action types
  */
 export const CHANGE_SEARCH_QUERY = 'CHANGE_SEARCH_QUERY';
 export const CHANGE_SEARCH_RESULT = 'CHANGE_SEARCH_RESULT';
 export const CHANGE_ACTIVE_SEARCH_COUNT = 'CHANGE_ACTIVE_SEARCH_COUNT';
+export const FETCH_SEARCH_RESULTS_V5 = 'FETCH_SEARCH_RESULTS_V5';
+
+const myPromise = val =>
+  new Promise(resolve => resolve(`${val} World From Promise!`));
+
+async function getSearchResult({searchQuery}){
+  console.log('getSearchResult for: ', searchQuery);
+  const searchResult = await search({q: searchQuery});
+  return searchResult;
+}
+
+//https://github.com/redux-observable/redux-observable/issues/62
+export const fetchSearchResultV5Epic = (action$, state$) => action$.pipe(
+  filter(action => action.type === FETCH_SEARCH_RESULTS_V5),
+  flatMap(action => from(getSearchResult(action)).pipe(
+    map(searchResult => {
+      console.log('search Result is: ', searchResult);
+      return changeSearchResult({searchResult});
+    }),
+    startWith(incActiveSearchCount(state$.value)),
+    endWith(decActiveSearchCount(state$.value)),
+  )),
+);
+
+// export const fetchSearchResultV5Epic = (action$, state$) => action$.pipe(
+//   filter(action => action.type === FETCH_SEARCH_RESULTS_V5),
+//   // debounce(()=>timer(1000)),
+//
+//     flatMap(action=> concat(
+//       of(incActiveSearchCount(state$.value)),
+//       from(getSearchResult(action)).pipe(
+//         map(searchResult => {
+//           console.log("search result ", searchResult);
+//           return changeSearchResult({searchResult})
+//         })
+//       ),
+//       of(decActiveSearchCount(state$.value))
+//
+//     )),
+// );
+//
+// export const fetchSearchResultV5Epic = (action$, state$) => action$.pipe(
+//   filter(action => action.type === FETCH_SEARCH_RESULTS_V5),
+//   // debounce(()=>timer(1000)),
+//   mergeMap(action=>
+//       getSearchResult(action),
+//     (originalAction, searchResult) => {
+//       console.log('here', originalAction, searchResult);
+//       return changeSearchResult({searchResult});
+//     },
+//     // incActiveSearchCount(state$),
+//   ),
+// );
+
+
+function incActiveSearchCount(state){
+  console.log('incActiveSearchCount', state);
+  const newCount = state.search.activeSearchCount + 1;
+  return changeActiveSearchCount({activeSearchCount: newCount});
+}
+
+function decActiveSearchCount(state){
+  console.log('incActiveSearchCount', state);
+  const newCount = state.search.activeSearchCount - 1;
+  return changeActiveSearchCount({activeSearchCount: newCount});
+}
+
+//
+// export const fetchSearchResultV5Epic = action$ => action$.pipe(
+//   filter(action => action.type === FETCH_SEARCH_RESULTS_V5),
+//   debounce(()=>timer(1000)),
+//   mergeMap(
+//
+//     action=> getSearchResult(action),
+//     (originalAction, searchResult) => {
+//       console.log('here', originalAction, searchResult);
+//       return changeSearchResult({searchResult});
+//     },
+//     ()=> incrementActiveSearchCount(),
+//     (a, b, c) => {
+//       console.log('abc', a, b, c);
+//       return decrementActiveSearchCount();
+//     }
+//   )
+// );
+
+// export function fetchSearchResultV5Epic(action$){
+//   return action$.ofType(fetchSearchResultsV5)
+//     .mergeMap(({searchQuery})=>{
+//       console.log('fetchSearchResultV5Epic');
+//     })
+// }
 
 /**
  * This is fired when the ui input changes, and results in the state.search.searchQuery getting changed, as well as a potential fetch for search results.
@@ -31,6 +127,10 @@ export function changeSearchResult({searchResult}){
  */
 export function changeActiveSearchCount({activeSearchCount}){
   return { type: CHANGE_ACTIVE_SEARCH_COUNT, activeSearchCount};
+}
+
+export function fetchSearchResultsV5({searchQuery}){
+  return { type: FETCH_SEARCH_RESULTS_V5, searchQuery};
 }
 
 /**
@@ -133,7 +233,7 @@ async function fetchSearchResultsButOnlyDisplayCurrentQueryResults({searchQuery,
   }
 }
 
-const debouncedFetchSearchResultV4 = debounce({func: fetchSearchResultsButOnlyDisplayCurrentQueryResults, waitMs: 1000});
+const debouncedFetchSearchResultV4 = debounceTime({func: fetchSearchResultsButOnlyDisplayCurrentQueryResults, waitMs: 1000});
 
 export function fetchSearchResultV4({searchQuery}){
   return async (dispatch, getState)=>{
@@ -141,7 +241,7 @@ export function fetchSearchResultV4({searchQuery}){
   }
 }
 
-function debounce({func, waitMs}){
+function debounceTime({func, waitMs}){
   let lastCallTime;
   let timeoutId;
   async function wrappedFunc(...args){
