@@ -1,5 +1,5 @@
 
-import {CHANGE_SEARCH_QUERY, CHANGE_SEARCH_RESULT, CHANGE_ACTIVE_SEARCH_COUNT} from './actions';
+import {CHANGE_SEARCH_QUERY, CHANGE_SEARCH_RESULT, CHANGE_ACTIVE_SEARCH_COUNT, INCREMENT_ACTIVE_SEARCH_COUNT, DECREMENT_ACTIVE_SEARCH_COUNT} from './actions';
 
 /**
  * Reducer for changing the ui
@@ -15,6 +15,11 @@ function search(state={}, action) {
       return {...state, searchResult: action.searchResult};
     case CHANGE_ACTIVE_SEARCH_COUNT:
       return {...state, activeSearchCount: action.activeSearchCount};
+    case INCREMENT_ACTIVE_SEARCH_COUNT:
+      console.log('active search count is : ', state.activeSearchCount);
+      return {...state, activeSearchCount: state.activeSearchCount + 1};
+    case DECREMENT_ACTIVE_SEARCH_COUNT:
+      return {...state, activeSearchCount: state.activeSearchCount - 1};
     default:
       return state
   }

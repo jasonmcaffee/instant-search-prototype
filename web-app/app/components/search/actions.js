@@ -10,9 +10,9 @@ export const CHANGE_SEARCH_QUERY = 'CHANGE_SEARCH_QUERY';
 export const CHANGE_SEARCH_RESULT = 'CHANGE_SEARCH_RESULT';
 export const CHANGE_ACTIVE_SEARCH_COUNT = 'CHANGE_ACTIVE_SEARCH_COUNT';
 export const FETCH_SEARCH_RESULTS_V5 = 'FETCH_SEARCH_RESULTS_V5';
+export const INCREMENT_ACTIVE_SEARCH_COUNT = 'INCREMENT_ACTIVE_SEARCH_COUNT';
+export const DECREMENT_ACTIVE_SEARCH_COUNT = 'DECREMENT_ACTIVE_SEARCH_COUNT';
 
-const myPromise = val =>
-  new Promise(resolve => resolve(`${val} World From Promise!`));
 
 async function getSearchResult({searchQuery}){
   console.log('getSearchResult for: ', searchQuery);
@@ -23,84 +23,23 @@ async function getSearchResult({searchQuery}){
 //https://github.com/redux-observable/redux-observable/issues/62
 export const fetchSearchResultV5Epic = (action$, state$) => action$.pipe(
   filter(action => action.type === FETCH_SEARCH_RESULTS_V5),
+  debounce(()=>timer(500)),
   flatMap(action => from(getSearchResult(action)).pipe(
-    map(searchResult => {
-      console.log('search Result is: ', searchResult);
-      return changeSearchResult({searchResult});
-    }),
-    startWith(incActiveSearchCount(state$.value)),
-    endWith(decActiveSearchCount(state$.value)),
+    map(searchResult => changeSearchResult({searchResult})),
+    startWith(incActiveSearchCount()),
+    endWith(decActiveSearchCount()),
   )),
 );
 
-// export const fetchSearchResultV5Epic = (action$, state$) => action$.pipe(
-//   filter(action => action.type === FETCH_SEARCH_RESULTS_V5),
-//   // debounce(()=>timer(1000)),
-//
-//     flatMap(action=> concat(
-//       of(incActiveSearchCount(state$.value)),
-//       from(getSearchResult(action)).pipe(
-//         map(searchResult => {
-//           console.log("search result ", searchResult);
-//           return changeSearchResult({searchResult})
-//         })
-//       ),
-//       of(decActiveSearchCount(state$.value))
-//
-//     )),
-// );
-//
-// export const fetchSearchResultV5Epic = (action$, state$) => action$.pipe(
-//   filter(action => action.type === FETCH_SEARCH_RESULTS_V5),
-//   // debounce(()=>timer(1000)),
-//   mergeMap(action=>
-//       getSearchResult(action),
-//     (originalAction, searchResult) => {
-//       console.log('here', originalAction, searchResult);
-//       return changeSearchResult({searchResult});
-//     },
-//     // incActiveSearchCount(state$),
-//   ),
-// );
-
-
-function incActiveSearchCount(state){
-  console.log('incActiveSearchCount', state);
-  const newCount = state.search.activeSearchCount + 1;
-  return changeActiveSearchCount({activeSearchCount: newCount});
+function incActiveSearchCount(){
+  console.log('incActiveSearchCount called');
+  return {type: INCREMENT_ACTIVE_SEARCH_COUNT};
 }
 
-function decActiveSearchCount(state){
-  console.log('incActiveSearchCount', state);
-  const newCount = state.search.activeSearchCount - 1;
-  return changeActiveSearchCount({activeSearchCount: newCount});
+function decActiveSearchCount(){
+  return {type: DECREMENT_ACTIVE_SEARCH_COUNT};
 }
 
-//
-// export const fetchSearchResultV5Epic = action$ => action$.pipe(
-//   filter(action => action.type === FETCH_SEARCH_RESULTS_V5),
-//   debounce(()=>timer(1000)),
-//   mergeMap(
-//
-//     action=> getSearchResult(action),
-//     (originalAction, searchResult) => {
-//       console.log('here', originalAction, searchResult);
-//       return changeSearchResult({searchResult});
-//     },
-//     ()=> incrementActiveSearchCount(),
-//     (a, b, c) => {
-//       console.log('abc', a, b, c);
-//       return decrementActiveSearchCount();
-//     }
-//   )
-// );
-
-// export function fetchSearchResultV5Epic(action$){
-//   return action$.ofType(fetchSearchResultsV5)
-//     .mergeMap(({searchQuery})=>{
-//       console.log('fetchSearchResultV5Epic');
-//     })
-// }
 
 /**
  * This is fired when the ui input changes, and results in the state.search.searchQuery getting changed, as well as a potential fetch for search results.
