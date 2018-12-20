@@ -18,7 +18,6 @@ export const ERROR_FETCHING_SEARCH_RESULTS = 'ERROR_FETCHING_SEARCH_RESULTS';
 async function getSearchResult({searchQuery}){
   console.log('getSearchResult for: ', searchQuery);
   const searchResult = await search({q: searchQuery});
-  throw new Error('failed search result!');
   return searchResult;
 }
 
@@ -28,6 +27,8 @@ export const fetchSearchResultV5Epic = (action$, state$) => action$.pipe(
   ofType(FETCH_SEARCH_RESULTS_V5),
   //wait 500 ms after they stop typing to perform the fetch.
   debounce(()=>timer(500)),
+  //only perform search when the search query has 3 or more chars.
+  filter(()=> state$.value.search.searchQuery.length > 2),
   //call getSearchResult
   flatMap(action => from(getSearchResult(action)).pipe(
     //handle the result by dispatching an event that the search results should be changed
@@ -47,11 +48,7 @@ export const fetchSearchResultV5Epic = (action$, state$) => action$.pipe(
     )),
   )),
 );
-//
-// catchError(error=>concat([
-//   of(errorFetchingSearchResult({error})),
-//   of(decActiveSearchCount()),
-// ])),
+
 //special for rxjs
 function incActiveSearchCount(){
   return {type: INCREMENT_ACTIVE_SEARCH_COUNT};
