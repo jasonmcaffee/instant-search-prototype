@@ -1,6 +1,6 @@
 import {search} from '../../client/searchClient';
-import {debounce, mergeMap, map, filter, concat, flatMap, startWith, endWith} from 'rxjs/operators';
-import {timer, of, from,} from 'rxjs';
+import {debounce, mergeMap, map, filter, concat, flatMap, startWith, endWith, takeUntil, catchError} from 'rxjs/operators';
+import {timer, of, from, } from 'rxjs';
 import {ofType, } from 'redux-observable';
 
 /*
@@ -12,35 +12,61 @@ export const CHANGE_ACTIVE_SEARCH_COUNT = 'CHANGE_ACTIVE_SEARCH_COUNT';
 export const FETCH_SEARCH_RESULTS_V5 = 'FETCH_SEARCH_RESULTS_V5';
 export const INCREMENT_ACTIVE_SEARCH_COUNT = 'INCREMENT_ACTIVE_SEARCH_COUNT';
 export const DECREMENT_ACTIVE_SEARCH_COUNT = 'DECREMENT_ACTIVE_SEARCH_COUNT';
-
+export const CANCEL_FETCH_SEARCH_RESULTS = 'CANCEL_FETCH_SEARCH_RESULTS';
+export const ERROR_FETCHING_SEARCH_RESULTS = 'ERROR_FETCHING_SEARCH_RESULTS';
 
 async function getSearchResult({searchQuery}){
   console.log('getSearchResult for: ', searchQuery);
   const searchResult = await search({q: searchQuery});
+  throw new Error('failed search result!');
   return searchResult;
 }
 
 //https://github.com/redux-observable/redux-observable/issues/62
 export const fetchSearchResultV5Epic = (action$, state$) => action$.pipe(
-  filter(action => action.type === FETCH_SEARCH_RESULTS_V5),
+  //handle FETCH_SEARCH_RESULTS_V5 dispatch actions
+  ofType(FETCH_SEARCH_RESULTS_V5),
+  //wait 500 ms after they stop typing to perform the fetch.
   debounce(()=>timer(500)),
+  //call getSearchResult
   flatMap(action => from(getSearchResult(action)).pipe(
+    //handle the result by dispatching an event that the search results should be changed
     map(searchResult => changeSearchResult({searchResult})),
+    //allow cancellations of inflight requests so we don't inadvertently display wrong search result.
+    takeUntil(action$.pipe(ofType(CANCEL_FETCH_SEARCH_RESULTS))),
+    //cancel any existing calls to this epic, so no more than 1 request is active at a time
+    startWith(cancelFetchUser()),
+    //increment the search result immediately
     startWith(incActiveSearchCount()),
+    //decrement the search count after getSearchResult finishes
     endWith(decActiveSearchCount()),
+    //handle errors from getSearchResult. of() can take multiple actions as params, so we can dispatch that there was an error, as well as dec active search count.
+    catchError(error=>of(
+      errorFetchingSearchResult({error}),
+      decActiveSearchCount()
+    )),
   )),
 );
-
+//
+// catchError(error=>concat([
+//   of(errorFetchingSearchResult({error})),
+//   of(decActiveSearchCount()),
+// ])),
+//special for rxjs
 function incActiveSearchCount(){
-  console.log('incActiveSearchCount called');
   return {type: INCREMENT_ACTIVE_SEARCH_COUNT};
 }
-
+//special for rxjs
 function decActiveSearchCount(){
   return {type: DECREMENT_ACTIVE_SEARCH_COUNT};
 }
-
-
+//special for rxjs
+function cancelFetchUser(){
+  return {type: CANCEL_FETCH_SEARCH_RESULTS};
+}
+function errorFetchingSearchResult({error}){
+  return {type: ERROR_FETCHING_SEARCH_RESULTS, error};
+}
 /**
  * This is fired when the ui input changes, and results in the state.search.searchQuery getting changed, as well as a potential fetch for search results.
  * @param searchQuery - query the user has typed
